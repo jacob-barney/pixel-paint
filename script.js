@@ -37,11 +37,21 @@ let swatch9Y = swatch8Y+41;
 let swatchR;
 let swatchG;
 let swatchB;   
-//
+
+let redSlider, greenSlider, blueSlider;
 let selectedColor = [255, 255, 255];
 
 function setup () {
     createCanvas(1024, 768);
+    redSlider = createSlider(0, 255, 0 )
+    redSlider.position(672, 455);
+    redSlider.style('width', '327px');
+    greenSlider = createSlider(0, 255, 0 )
+    greenSlider.position(672, 490);
+    greenSlider.style('width', '327px');
+    blueSlider = createSlider(0, 255, 0 )
+    blueSlider.position(672, 525);
+    blueSlider.style('width', '327px');
     noStroke();
     //define pixels and add them to grid array (not displayed yet)
     for (let i = 0; i < 672; i++) {
@@ -240,13 +250,25 @@ function mousePressed () {
         grid[i].clicked(mouseX, mouseY);
     }
 
-    for (let j = 0; j < grid.length; j++) { 
+    for (let j = 0; j < palette.length; j++) { 
         palette[j].clicked(mouseX, mouseY);
     }
+
+    if (mouseX > 675 && mouseX < 1002 && mouseY > 393 && mouseY < 433) {
+        selectedColor[0] = redSlider.value();
+        selectedColor[1] = greenSlider.value();
+        selectedColor[2] = blueSlider.value(); 
+        rect(675, 393, 327, 40);
+    }
+   
+    
 }
 
 
+
+
 function draw() {
+    
     background(0);
     //call instances
     noStroke();
@@ -259,9 +281,24 @@ function draw() {
         palette[j].create();
     }
 
+
+    noStroke();
+    fill(redSlider.value(), 0, 0);
+    rect(675, 455, 327, 20, 20);
+    fill(0, greenSlider.value(), 0);
+    rect(675, 490, 327, 20, 20);
+    fill(0, 0, blueSlider.value());
+    rect(675, 525, 327, 20, 20);
+
+
+    stroke(200);
+    strokeWeight(2);
+    fill(redSlider.value(), greenSlider.value(), blueSlider.value());
+    rect(675, 393, 327, 40);
+
     
     fill(selectedColor[0], selectedColor[1], selectedColor[2]);
-    ellipse(840, 575, 200, 200);
+    ellipse(840, 635, 100, 100);
   
     textSize(32);
     fill(255, 255, 255);
@@ -316,12 +353,13 @@ class Swatch {
     clicked (px, py) {
         let d = dist(px, py, this.x+this.size/2 + 1, this.y+this.size/2 + 1);
         if (d < this.size/2 + 1) {
-         selectedColor[0] = this.r;
-         selectedColor[1] = this.g;
-         selectedColor[2] = this.b;
-            
+        selectedColor[0] = this.r;
+        selectedColor[1] = this.g;
+        selectedColor[2] = this.b;
+        
         }
     }
 }
 //all parameters for functions within classes
 //must be prefaced with this.!!! 
+
